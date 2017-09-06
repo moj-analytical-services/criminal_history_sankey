@@ -171,8 +171,8 @@ h1 {
 <div class="control" id="otype_control">
     <label for ="otype"><b>Select age group</b></label>
      <label><input type="checkbox" class="select_all" id = "select_all_type" value="type" checked> <i>Select All</i></label>
-    <label><input type="checkbox" class="otype ind_linked" value="Adults" checked> Adults</label> 
-    <label><input type="checkbox" class="otype ind_linked" value="Juveniles" checked> Juveniles</label> 
+    <label><input type="checkbox" class="otype" value="Adults" checked> Adults</label> 
+    <label><input type="checkbox" class="otype" value="Juveniles" checked> Juveniles</label> 
    <!-- <label><input type="checkbox" class="otype ind_linked" value="Unknown" checked> Unknown</label> -->
 
   </div> 
@@ -201,51 +201,51 @@ h1 {
       value="group"> <i>Select All</i> </label> 
 
     <label><input type="checkbox" checked
-      class="ogroup ind_linked"
+      class="ogroup"
       value="01 Violence against the person"> Violence against the person</label> 
 
     <label><input type="checkbox" checked
-      class="ogroup ind_linked"
+      class="ogroup"
       value="02 Sexual offences"> Sexual offences</label> 
 
     <label><input type="checkbox" checked
-      class="ogroup ind_linked"
+      class="ogroup"
       value="03 Robbery"> Robbery</label> 
 
     <label><input type="checkbox" checked
-      class="ogroup ind_linked" 
+      class="ogroup" 
       value="04 Theft Offences"> Theft offences</label> 
 
     <label><input type="checkbox" checked
-      class="ogroup ind_linked"
+      class="ogroup"
       value="05 Criminal damage and arson"> Criminal damage and arson</label> 
 
     <label><input type="checkbox" checked
-      class="ogroup ind_linked"
+      class="ogroup"
       value="06 Drug offences"> Drug offences</label> 
 
     <label><input type="checkbox" checked
-      class="ogroup ind_linked"
+      class="ogroup"
       value="07 Possession of weapons"> Possession of weapons</label> 
 
     <label><input type="checkbox" checked
-      class="ogroup ind_linked"
+      class="ogroup"
       value="08 Public order offences"> Public order offences</label> 
 
     <label><input type="checkbox" checked
-      class="ogroup ind_linked"
+      class="ogroup"
       value="09 Miscellaneous crimes against society"> Miscellaneous crimes against society</label> 
 
     <label><input type="checkbox" checked 
-      class="ogroup ind_linked"
+      class="ogroup"
       value="10 Fraud offences"> Fraud offences</label> 
 
     <label><input type="checkbox" checked
-      class="ogroup ind_linked"
+      class="ogroup"
       value="11 Summary offences excluding motoring"> Summary non-motoring</label> 
 
     <label><input type="checkbox" checked 
-      class="ogroup ind_linked"
+      class="ogroup"
       value="12 Summary motoring offences"> Summary motoring</label> 
   </div> 
 </div>
@@ -602,10 +602,6 @@ function checkSelectAll(){
 }
 
 function selectAllUpdate(){
-  // if select all is turned on then set all options to checked and update sankey
-  // d3.selectAll(".ogroup,.otype,.select_all").property("checked",this.checked)
-  // d3.selectAll(".select_all").property("checked")
-
   //if selectAll button has been turned off
   if(this.checked == false){
     // select all tick boxes and turn them off
@@ -620,52 +616,30 @@ function selectAllUpdate(){
   }
 
   // If select all types has been clicked on and all indictable offence groups are off
-  if(this.value == "type" && this.checked && d3.selectAll(".ogroup.ind_linked")[0].map(function(d){return d.checked}).every(function(d) {return d == false})){
-    d3.selectAll(".ogroup.ind_linked").property("checked", true);
+  if(this.value == "type" && this.checked && d3.selectAll(".ogroup")[0].map(function(d){return d.checked}).every(function(d) {return d == false})){
+    d3.selectAll(".ogroup").property("checked", true);
   }
   // If select all groups has been clicked
-  else if(this.value == "group" && this.checked && d3.selectAll(".otype.ind_linked")[0].map(function(d){return d.checked}).every(function(d) {return d == false})){
-    d3.selectAll(".otype.ind_linked").property("checked", true);
+  else if(this.value == "group" && this.checked && d3.selectAll(".otype")[0].map(function(d){return d.checked}).every(function(d) {return d == false})){
+    d3.selectAll(".otype").property("checked", true);
   }
 
   // Select all tick boxes for whichever select all category was pressed
   d3.selectAll(".o"+this.value).property("checked",this.checked);
 
   // match summary offence clicks to select all as summary tickboxes are linked
-  d3.selectAll(".SNM, .SMO").property("checked",this.checked);
   checkSelectAll();
   updateData();
 }
 
 function checkboxEvent(){
-  // update the select all checkbox based on other checkboxes state and update sankey
-  if (-1<["snm", "smo", "summary motoring", "summary non-motoring"].indexOf(this.value)){
-    d3.selectAll("."+this.className.substring(this.className.length-3,this.className.length)).property("checked",this.checked);
-  }
-
-  // if both IND and TEW are off
-  if(d3.selectAll(".otype.ind_linked")[0].map(function(d){return d.checked}).every(function(d) {return d == false})){
-    // Check if the click event was from IND or TEW
-    if(this.value == "ind" || this.value == "tew" ){
-      d3.selectAll(".ogroup.ind_linked").property("checked", false);
+  //If all checkboxes are currently false
+  if (d3.selectAll(".otype.ogroup")[0].map(function(d){return d.checked}).every(function(d) {return d == false})){
+    if (this.value == "Adults" || this.value == "Juveniles") {
+      d3.selectAll(".ogroup").property("checked", true)
     }
-
-    // Check to see if the click event was from and indicable offence group if so and turned on turn on both ind and tew
-    if(-1 < d3.selectAll(".ogroup.ind_linked")[0].map(function(d){return d.value}).indexOf(this.value) && this.checked){
-      d3.selectAll(".otype.ind_linked").property("checked",true);
-    }
-  }
-
-  // if offence groups 1 - 10 are off
-  if(d3.selectAll(".ogroup.ind_linked")[0].map(function(d){return d.checked}).every(function(d) {return d == false})){
-    // Check if the click event was from IND or TEW
-    if((this.value == "ind" || this.value == "tew") && this.checked){
-      d3.selectAll(".ogroup.ind_linked").property("checked", true);
-    }
-
-    // Check to see if the click event was from an indicable offence group if so and turned off turn on both ind and tew
-    if(-1 < d3.selectAll(".ogroup.ind_linked")[0].map(function(d){return d.value}).indexOf(this.value) && !this.checked){
-      d3.selectAll(".otype.ind_linked").property("checked",false);
+    else {
+      d3.selectAll(".otype").property("checked", true)
     }
   }
 
