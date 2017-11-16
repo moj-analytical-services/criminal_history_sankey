@@ -1,14 +1,12 @@
 ﻿<!DOCTYPE html>
 <meta charset="utf-8">
-<head>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="https://d3js.org/d3.v3.min.js"></script>
-  <script src="https://moj-analytical-services.github.io/criminal_justice_statistics_sankey/javascript/sankey.js"></script>
+  <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
   <script src="https://moj-analytical-services.github.io/criminal_justice_statistics_sankey/javascript/asdConsoleOutput.js"></script>
-  </head>
-<title> Criminal History Statistics </title>
+  <script src="https://moj-analytical-services.github.io/criminal_justice_statistics_sankey/javascript/sankey.js"></script>
+<title> Criminal History Sankey Diagram </title>
 
 <style>
 
@@ -128,7 +126,7 @@ h1 {
 <body>
   <div id = "header">
     <div id = "logo">
-      <img src="https://moj-analytical-services.github.io/criminal_justice_statistics_sankey/data/moj_logo.png" id = "moj_logo">
+      <img src="data/moj_logo.png" id = "moj_logo">
     </div>
     <div id = "head1">
       <h1>Criminal Justice System and Offenders Criminal History</h1>
@@ -145,14 +143,14 @@ h1 {
       <li>Every effort is made to ensure that the figures presented are accurate and complete. However, it is important to note that these data have been extracted from the Police National Computer (PNC) The PNC is a large administrative data systems as well as a live operational database. As a consequence, care should be taken to ensure data collection processes and their inevitable limitations are taken into account when those data are used. </li>
       <Li>Figures shown in the graph are counts of caution or conviction occasions for offences dealt with by the Home Office police force and British Transport police and prosecuted in English and Welsh court . Offfence type is based on the primary offence on the occasion. Where mutiple offences were on the same occasion, the primary was one recieved the heaviest penalty.</Li>  
       <li>Figures include males, females, persons where sex "Not Stated" and other offenders, i.e. companies, public bodies, etc. </li>
-      <li> Dropdown Option and tick boxes allow different combinations to be shown.  For more information on offenders criminal history and commentary on the statistics underlying this tool please visit the  <a href = https://www.gov.uk/government/statistics/criminal-justice-system-statistics-quarterly-march-2017> the publication landing page</a>. </li>
+      <li> Dropdown Option and tick boxes allow different combinations to be shown.  For more information on offenders criminal history and commentary on the statistics underlying this tool please visit the  <a href = https://www.gov.uk/government/statistics/criminal-justice-system-statistics-quarterly-december-2016> the publication landing page</a>. </li>
       <li> The default view of the chart may not be ordered as required by users. However, it can be rearranged by drag the notes to the position as wanted.</Li>
    </ol>
   </div>
 
 <div id = "filterOptions">
   <div class="control">
-    <label for ="year"><b>Select 12 months ending March:</b></label>
+    <label for ="year"><b>Select 12 months ending June:</b></label>
     <select id = "year">
       <option>2017</option> 
       <option>2016</option> 
@@ -168,36 +166,34 @@ h1 {
     </select>
   </div>
 
+<!--checkbox age grouo -->
 <div class="control" id="otype_control">
-    <label for ="otype"><b>Select age group</b></label>
-     <label><input type="checkbox" class="select_all" id = "select_all_type" value="type" checked> <i>Select All</i></label>
-    <label><input type="checkbox" class="otype" value="Adults" checked> Adults</label> 
-    <label><input type="checkbox" class="otype" value="Juveniles" checked> Juveniles</label> 
-   <!-- <label><input type="checkbox" class="otype ind_linked" value="Unknown" checked> Unknown</label> -->
+    <label for ="otype_control"><b>Select age group</b></label>
+     <label><input type="checkbox" checked class="select_all" id = "select_all_type" value="type" checked> <i>Select All</i></label>
+    <label><input type="checkbox" checked class="otype" value="Adults" checked> Adults</label> 
+    <label><input type="checkbox" checked class="otype" value="Juveniles" checked> Juveniles</label> 
+   <!-- <label><input type="checkbox" checked class="otype" value="Unknown" checked> Unknown</label> -->
 
   </div> 
 
-<!--<div class="control" id="ogroup">
-    <label for ="otype"><b>Select category</b></label>
+<!--checkbox gender group -->
+<div class="control" id="gender_control">
+    <label for ="ogender_control"><b>Select gender group</b></label>
+     <label><input type="checkbox" checked class="select_all" id = "select_all_gender" value="sex" checked> <i>Select All</i></label>
+    <label><input type="checkbox" checked class="ogender" value="1 Male" checked> Males</label> 
+    <label><input type="checkbox" checked class="ogender" value="2 Female" checked> Females</label> 
+   <label><input type="checkbox" checked class="ogender" value="Unknown" checked> Unknown</label> 
 
-     <label><input type="checkbox" checked
-      class="select_all" id = "select_all_group")
-      value="group"> <i>Select All</i> </label> 
+  </div> 
 
-     <label><input type="checkbox" checked
-      class="ogroup ind_linked"
-      value="Indictable"> Indictable offences</label> 
 
-    <label><input type="checkbox" checked
-      class="ogroup ind_linked""
-      value="Summary"> Summary offences</label> 
-    </div> -->
+<!-- checkbox offence type -->
 
-  <div class="control" id="ogroup">
-    <label for ="otype"><b>Select offence group</b></label>
+  <div class="control" id="ogroup_control">
+    <label for ="ogroup_control"><b>Select offence group</b></label>
 
     <label><input type="checkbox" checked
-      class="select_all" id = "select_all_group")
+      class="select_all" id = "select_all_group"
       value="group"> <i>Select All</i> </label> 
 
     <label><input type="checkbox" checked
@@ -257,16 +253,18 @@ var originalData = [];
 
 // Wrap data read in a promise to ensure data is read in before being referenced later on
 var dataRead = new Promise(function(resolve, reject){
-  d3.csv("data/sankey_data.csv", function(error, data) {
+  d3.csv("data/Data2017Q2a.csv", function(error, data) {
     
     if(error) reject(error);
 
     data.forEach(function (d){
       originalData.push(
         {
+	"orderID": d.orderid,
         "year": d.year,
         "offence_type": d.offence_type,
         "offence_group": d.offence_group,
+	"gender": d.gender,
         "source": d.source,
         "target": d.target,
         "value": +d.value
@@ -285,11 +283,13 @@ function initialise_data(){
 // Initialise tickbox selections
 d3.selectAll(".ogroup").property("checked",true);
 d3.selectAll(".otype").property("checked",true);
+d3.selectAll(".ogender").property("checked",true);
 d3.selectAll(".select_all").property("checked", true);
 
 // Call update data on tickbox change
 d3.selectAll(".ogroup").on("change", checkboxEvent);
 d3.selectAll(".otype").on("change", checkboxEvent);
+d3.selectAll(".ogender").on("change", checkboxEvent);
 d3.selectAll("#year").on("change", updateData);
 d3.selectAll(".select_all").on("change", selectAllUpdate);
 
@@ -305,7 +305,7 @@ d3.select("#caveat_button").on("click", function(){
   }
 })
 
-// Add button name change for caveats
+// Add button name change for filerOptions
 d3.select("#filterOptions").attr("class","collapse in")
 
 d3.select("#filter_options_button").on("click", function(){
@@ -371,6 +371,7 @@ initialise_data();
 function updateData(){
   var offenceTypes = [];
   var offenceGroups = [];
+  var genderTypes = [];
   var graph  = {"nodes" : [], "links" : []};
 
   // Populate list of offence types from selector
@@ -380,16 +381,25 @@ function updateData(){
     }
   }
 
-  // Populate list of offence groups from selector
-  for (i = 0; i < d3.selectAll(".ogroup")[0].length; i++){
+// Populate list of offence groups from selector
+   for (i = 0; i < d3.selectAll(".ogroup")[0].length; i++){
     if(d3.selectAll(".ogroup")[0][i].checked){
       offenceGroups.push(d3.selectAll(".ogroup")[0][i].value);
     }
   }
+
+ // Populate list of gender types from selector
+  for (i = 0; i < d3.selectAll(".ogender")[0].length; i++){
+  if(d3.selectAll(".ogender")[0][i].checked){
+      genderTypes.push(d3.selectAll(".ogender")[0][i].value);
+    }
+  }
+
+  
   
   // filter data based on selections
   var filteredData = originalData.filter(function(d){
-    return offenceGroups.indexOf(d.offence_group) >= 0 & offenceTypes.indexOf(d.offence_type) >= 0 & d.year == d3.select("#year").node().value;
+    return offenceGroups.indexOf(d.offence_group) >= 0 & offenceTypes.indexOf(d.offence_type) >= 0 & genderTypes.indexOf(d.gender) >= 0 & d.year == d3.select("#year").node().value;
     });
 
   // TEMP FIX
@@ -590,56 +600,90 @@ function updateSankey(graph){
 }
 
 function checkSelectAll(){
-    // select all otype elements, return their checked value as an array and then use javascript fn "every" to see if all on. If all tickboxes are on then set "select all" tickbox to true otherwise set it to false. Do this for both offence type and group select all buttons. Then update sankey.
-  var allCheck = {"type": false, "group": false};
+// select all otype elements, return their checked value as an array and then use javascript fn "every"
+//to see if all on. If all tickboxes are on then set "select all" tickbox to true otherwise set it to false. 
+//Do this for both offence type and group select all buttons. Then update sankey.
+
+  var allCheck = {"type": false, "group": false, "sex": false};
 
   allCheck.type = d3.selectAll(".otype")[0].map(function(d){return d.checked}).every(function(d){ return d});
   allCheck.group = d3.selectAll(".ogroup")[0].map(function(d){return d.checked}).every(function(d){ return d});
+  allCheck.sex = d3.selectAll(".ogender")[0].map(function(d){return d.checked}).every(function(d){ return d});
 
   d3.select("#select_all_type").property("checked", allCheck.type);
+
+  d3.select("#select_all_gender").property("checked", allCheck.sex);
 
   d3.select("#select_all_group").property("checked", allCheck.group);
 }
 
 function selectAllUpdate(){
+  // if select all is turned on then set all options to checked and update sankey
+   d3.selectAll(".ogroup,.otype,.ogender,.select_all").property("checked",this.checked)
+   d3.selectAll(".select_all").property("checked")
+
   //if selectAll button has been turned off
   if(this.checked == false){
     // select all tick boxes and turn them off
-    d3.selectAll(".ogroup,.otype,.select_all").property("checked",false);
+    d3.selectAll(".ogroup,.otype,.ogender,.select_all").property("checked",false);
   }
   else{
     // if every offence type and group tick box is off
-    if(d3.selectAll(".otype,.ogroup")[0].map(function(d){return d.checked}).every(function(d) {return d == false})){
+    if(d3.selectAll(".otype,.ogroup,ogender")[0].map(function(d){return d.checked}).every(function(d) {return d == false})){
       // then select everything on
-      d3.selectAll(".otype,.ogroup,.select_all").property("checked",true);
+      d3.selectAll(".otype,.ogroup,ogender,.select_all").property("checked",true);
     }
   }
 
+//Yu added below are not needed for Criminal history statisitcs
   // If select all types has been clicked on and all indictable offence groups are off
-  if(this.value == "type" && this.checked && d3.selectAll(".ogroup")[0].map(function(d){return d.checked}).every(function(d) {return d == false})){
-    d3.selectAll(".ogroup").property("checked", true);
-  }
+ // if(this.value == "type" && this.checked && d3.selectAll(".ogroup.ind_linked")[0].map(function(d){return d.checked}).every(function(d) {return d == false})){
+ //   d3.selectAll(".ogroup.ind_linked").property("checked", true);
+ // }
+
   // If select all groups has been clicked
-  else if(this.value == "group" && this.checked && d3.selectAll(".otype")[0].map(function(d){return d.checked}).every(function(d) {return d == false})){
-    d3.selectAll(".otype").property("checked", true);
-  }
+ // else if(this.value == "group" && this.checked && d3.selectAll(".otype.ind_linked")[0].map(function(d){return d.checked}).every(function(d) {return d == false})){
+ //   d3.selectAll(".otype.ind_linked").property("checked", true);
+ // }
 
   // Select all tick boxes for whichever select all category was pressed
   d3.selectAll(".o"+this.value).property("checked",this.checked);
 
   // match summary offence clicks to select all as summary tickboxes are linked
+  //d3.selectAll(".SNM, .SMO").property("checked",this.checked);
   checkSelectAll();
   updateData();
 }
 
 function checkboxEvent(){
-  //If all checkboxes are currently false
-  if (d3.selectAll(".otype.ogroup")[0].map(function(d){return d.checked}).every(function(d) {return d == false})){
-    if (this.value == "Adults" || this.value == "Juveniles") {
-      d3.selectAll(".ogroup").property("checked", true)
+  // update the select all checkbox based on other checkboxes state and update sankey
+ if (-1<["snm", "smo", "summary motoring", "summary non-motoring"].indexOf(this.value)){
+  d3.selectAll("."+this.className.substring(this.className.length-3,this.className.length)).property("checked",this.checked);
+ }
+
+  // if both IND and TEW are off
+  if(d3.selectAll(".otype.ind_linked")[0].map(function(d){return d.checked}).every(function(d) {return d == false})){
+    // Check if the click event was from IND or TEW
+    if(this.value == "ind" || this.value == "tew" ){
+      d3.selectAll(".ogroup.ind_linked").property("checked", false);
     }
-    else {
-      d3.selectAll(".otype").property("checked", true)
+
+    // Check to see if the click event was from and indicable offence group if so and turned on turn on both ind and tew
+    if(-1 < d3.selectAll(".ogroup.ind_linked")[0].map(function(d){return d.value}).indexOf(this.value) && this.checked){
+      d3.selectAll(".otype.ind_linked").property("checked",true);
+    }
+  }
+
+  // if offence groups 1 - 10 are off
+  if(d3.selectAll(".ogroup.ind_linked")[0].map(function(d){return d.checked}).every(function(d) {return d == false})){
+    // Check if the click event was from IND or TEW
+    if((this.value == "ind" || this.value == "tew") && this.checked){
+      d3.selectAll(".ogroup.ind_linked").property("checked", true);
+    }
+
+    // Check to see if the click event was from an indicable offence group if so and turned off turn on both ind and tew
+    if(-1 < d3.selectAll(".ogroup.ind_linked")[0].map(function(d){return d.value}).indexOf(this.value) && !this.checked){
+      d3.selectAll(".otype.ind_linked").property("checked",false);
     }
   }
 
