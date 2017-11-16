@@ -126,7 +126,7 @@ h1 {
 <body>
   <div id = "header">
     <div id = "logo">
-      <img src="data/moj_logo.png" id = "moj_logo">
+      <img src="https://moj-analytical-services.github.io/criminal_justice_statistics_sankey/data/moj_logo.png" id = "moj_logo">
     </div>
     <div id = "head1">
       <h1>Criminal Justice System and Offenders Criminal History</h1>
@@ -253,7 +253,7 @@ var originalData = [];
 
 // Wrap data read in a promise to ensure data is read in before being referenced later on
 var dataRead = new Promise(function(resolve, reject){
-  d3.csv("data/Data2017Q2a.csv", function(error, data) {
+  d3.csv("data/sankey_data.csv", function(error, data) {
     
     if(error) reject(error);
 
