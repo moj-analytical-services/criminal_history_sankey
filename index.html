@@ -152,6 +152,7 @@ h1 {
   <div class="control">
     <label for ="year"><b>Select 12 months ending December:</b></label>
     <select id = "year">
+      <option>2021</option>
       <option>2020</option> 
       <option>2019</option> 
       <option>2018</option> 
@@ -162,7 +163,6 @@ h1 {
       <option>2013</option>
       <option>2012</option>
       <option>2011</option>
-      <option>2010</option>
     </select>
   </div>
 
@@ -253,7 +253,7 @@ var originalData = [];
 
 // Wrap data read in a promise to ensure data is read in before being referenced later on
 var dataRead = new Promise(function(resolve, reject){
-  d3.csv("data/sankey_data.csv", function(error, data) {
+  d3.csv("data/Sankey_data.csv", function(error, data) {
     
     if(error) reject(error);
 
