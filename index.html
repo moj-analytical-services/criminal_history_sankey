@@ -143,7 +143,7 @@ h1 {
       <li>Every effort is made to ensure that the figures presented are accurate and complete. However, it is important to note that these data have been extracted from the Police National Computer (PNC). The PNC is a large administrative data system as well as a live operational database. Therefore, care should be taken to ensure data collection processes and their inevitable limitations are considered when those data are used. </li>
       <Li>Figures shown in the graph are counts of caution or conviction occasions for offences dealt with by the Home Office police force and British Transport police and prosecuted in English and Welsh court. Offence type is based on the primary offence on the occasion. Where multiple offences were on the same occasion, the primary was one received the heaviest penalty.</Li>  
       <li>Figures include males, females, persons where sex "Not Stated" and other offenders, i.e. companies, public bodies, etc. </li>
-      <li> Dropdown Options and tick boxes allow different combinations to be shown.  For more information on offenders criminal history and commentary on the statistics underlying this tool please visit the  <a href = https://www.gov.uk/government/statistics/first-time-entrants-fte-into-the-criminal-justice-system-and-offender-histories-year-ending-december-2023> publication landing page</a>. </li>
+      <li> Dropdown Options and tick boxes allow different combinations to be shown.  For more information on offenders criminal history and commentary on the statistics underlying this tool please visit the  <a href = https://www.gov.uk/government/statistics/first-time-entrants-fte-into-the-criminal-justice-system-and-offender-histories-year-ending-december-2024> publication landing page</a>. </li>
       <li> The default view of the chart may not be ordered as required by users. However, it can be rearranged by drag the notes to the position as wanted.</Li>
    </ol>
   </div>
@@ -152,17 +152,17 @@ h1 {
   <div class="control">
     <label for ="year"><b>Select 12 months ending December:</b></label>
     <select id = "year">
+      <option>2024</option>
       <option>2023</option>
-      <option>2022</option>
+      <option>2022</option> 
       <option>2021</option> 
       <option>2020</option> 
-      <option>2019</option> 
+      <option>2019</option>
       <option>2018</option>
       <option>2017</option>
-      <option>2016</option>
-      <option>2015</option> 
+      <option>2016</option> 
+      <option>2015</option>
       <option>2014</option>
-      <option>2013</option>
     </select>
   </div>
 
@@ -253,7 +253,7 @@ var originalData = [];
 
 // Wrap data read in a promise to ensure data is read in before being referenced later on
 var dataRead = new Promise(function(resolve, reject){
-  d3.csv("data/Sankey_data_2023.csv", function(error, data) {
+  d3.csv("data/Sankey_data_2024.csv", function(error, data) {
     
     if(error) reject(error);
 
